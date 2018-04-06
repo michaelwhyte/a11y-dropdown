@@ -135,28 +135,41 @@ function test2(){
 //
 // The code from the stackoverflow question is based on
 // jQuery's siblings() code
-function getSiblings(n, filter) {
-    return getChildren(n.parentNode.firstChild, n, filter);
-}
+// function getSiblings(n, filter) {
+//     return getChildren(n.parentNode.firstChild, n, filter);
+// }
 
-// Get Children Elements
-function getChildren(n, skipMe, filter){
-    let r = [];
-    for ( ; n; n = n.nextSibling ){ 
-       if ( n.nodeType == 1 && n != skipMe){
-		   	if(filter){
-				if(n.matches(filter)){
-					r.push( n );
-				}
-			}else{
+// // Get Children Elements
+// function getChildren(n, skipMe, filter){
+//     let r = [];
+//     for ( ; n; n = n.nextSibling ){ 
+//        if ( n.nodeType == 1 && n != skipMe){
+// 		   	if(filter){
+// 				if(n.matches(filter)){
+// 					r.push( n );
+// 				}
+// 			}else{
+// 				r.push( n );
+// 			}			
+// 	   }		  
+// 	}        
+//     return r;
+// }
+
+function getChildren(parentElement, filter){
+	let r = [];
+	n = parentElement.firstElementChild;
+    for ( ; n; n = n.nextElementSibling ){ 
+		if(filter){
+			if(n.matches(filter)){
 				r.push( n );
-			}			
-	   }		  
+			}
+		}else{
+			r.push(n);
+		}				  
 	}        
     return r;
 }
-
-
 
 
 // Get Siblings of an Element
