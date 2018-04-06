@@ -61,12 +61,29 @@ const subNavBtn = document.querySelectorAll('.dropdown-toggle');
 
 // Event Handlers for Sub Nav items
 
-// Hover event for subNav
+// Mousenter event for subNav
+subNav.forEach(function(el){
+	el.addEventListener('mouseenter', function(){
+		setBtnState(el, true);
+	});
+});
 
+// Mouseleave event for subNav
+subNav.forEach(function(el){
+	el.addEventListener('mouseleave', function(){
+		setBtnState(el, false);
+	});
+});
+
+function setBtnState(el, isDisabled){
+	btns = getChildren(el, '.dropdown-toggle');
+	btns.forEach(function(btn){
+		btn.disabled = isDisabled;
+	});
+};
 
 // Focus Event for SubNavMainLink
 subNavMainLink.forEach(function(el){
-	//console.log('hello');
 	el.addEventListener('focus', showSubNavOnFocus);
 });
 
@@ -77,11 +94,11 @@ function showSubNavOnFocus(e){
 	const btn = this.nextElementSibling;
 	const subList = btn.nextElementSibling;
 
-	if(subList.classList.contains('toggled')){
-		subList.classList.remove('toggled');
-		btn.textContent = srt.expand;
-		return;
-	}
+	// if(subList.classList.contains('toggled')){
+	// 	subList.classList.remove('toggled');
+	// 	btn.textContent = srt.expand;
+	// 	return;
+	// }
 
 	btn.textContent = srt.collapse;
 	subList.classList.add('toggled');
