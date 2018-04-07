@@ -16,6 +16,9 @@ const subNavMainLink = siteNav.querySelectorAll('.page_item_has_children > a:fir
 const subNavList = siteNav.querySelectorAll('.children');
 // Select the SubNav Links
 const subNavLinks = siteNav.querySelectorAll('.children > li > a');
+// Select the SubNav Links that are the last link in
+// their list
+const subNavLastLinks = siteNav.querySelectorAll('.children > li:last-child a'); 
 // Screen Reader Text Object	
 const srt = {
 	expand: 'Expand nav',
@@ -78,6 +81,7 @@ subNav.forEach(function(el){
 function setBtnState(el, isDisabled){
 	btns = getChildren(el, '.dropdown-toggle');
 	btns.forEach(function(btn){
+		isDisabled ? btn.textContent = srt.collapse : btn.textContent = srt.expand;
 		btn.disabled = isDisabled;
 	});
 };
@@ -89,90 +93,75 @@ subNavMainLink.forEach(function(el){
 
 function showSubNavOnFocus(e){
 
-	console.log(e.target);
-
 	const btn = this.nextElementSibling;
 	const subList = btn.nextElementSibling;
-
-	// if(subList.classList.contains('toggled')){
-	// 	subList.classList.remove('toggled');
-	// 	btn.textContent = srt.expand;
-	// 	return;
-	// }
 
 	btn.textContent = srt.collapse;
 	subList.classList.add('toggled');
 
 }
 
-// Click Event for SubNavBtn
-subNavBtn.forEach(function(el){
-	el.addEventListener('click', showSubNavOnClick);
+// Keydown Event for SubNavMainLink
+// *** This uses the same function as
+// the subNavLastLinks keydown event
+subNavMainLink.forEach(function(el){
+	el.addEventListener('keydown', function(e){
+		hideSubNav(e, this, true);
+	});
 });
 
-function showSubNavOnClick(){
+// Click Event for SubNavBtn
+subNavBtn.forEach(function(el){
+	el.addEventListener('click', showAndHideSubNavOnClick);
+});
+
+function showAndHideSubNavOnClick(){
 	this.textContent === srt.expand ? this.textContent = srt.collapse : this.textContent = srt.expand;
 	console.log(this.nextElementSibling.classList);
 	this.nextElementSibling.classList.toggle('toggled');
 }
 
-
-
-
-
-
-
-
-
-subNavList.forEach(function(el){
-	el.addEventListener('focusin', test)
+// Keydown Event for last link in
+// Sub Nav list
+subNavLastLinks.forEach(function(el){
+	//el.addEventListener('blur', hideSubNav);
+	el.addEventListener('keydown', function(e){
+		hideSubNav(e, this, false);
+	});
 });
 
-subNavList.forEach(function(el){
-	el.addEventListener('focusout', test2)
-});
+function hideSubNav(e, el, shift){
+	//const subList = this.parentElement.parentElement;
+	//const btn = subList.previousElementSibling;
 
-function test(){
-	//console.log('Hello from ul...');
+	//console.log(e.shiftKey);
+	//console.log(e.keyCode);
+
+	if(shift){
+		const btn = el.nextElementSibling;
+		const subList = btn.nextElementSibling;
+		// This snippet based on this Stackoverflow
+		// answer:
+		// https://stackoverflow.com/questions/3044083/what-is-the-key-code-for-shifttab?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+		if(e.keyCode === 9 && e.shiftKey === true){
+			subList.classList.remove('toggled');
+			btn.textContent = srt.expand;
+		}
+	}else{
+		const subList = el.parentElement.parentElement;
+		const btn = subList.previousElementSibling;
+		// This snippet based on this Stackoverflow
+		// answer:
+		// https://stackoverflow.com/questions/3044083/what-is-the-key-code-for-shifttab?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+		if(e.keyCode === 9 && e.shiftKey === false){
+			subList.classList.remove('toggled');
+			btn.textContent = srt.expand;
+		}	
+	}
+
 }
-
-function test2(){
-	//console.log('focusout from ul...');
-}
-
-// Blur Event
-
 
 // Utility Functions
-
-// Get Sibling Elements with Filter
-// The getSiblings() and getChildren() code has been customized by @michaelwhyte
-// from code found on this Stackoverflow question:
-// https://stackoverflow.com/questions/842336/is-there-a-way-to-select-sibling-nodes
-//
-// The code from the stackoverflow question is based on
-// jQuery's siblings() code
-// function getSiblings(n, filter) {
-//     return getChildren(n.parentNode.firstChild, n, filter);
-// }
-
-// // Get Children Elements
-// function getChildren(n, skipMe, filter){
-//     let r = [];
-//     for ( ; n; n = n.nextSibling ){ 
-//        if ( n.nodeType == 1 && n != skipMe){
-// 		   	if(filter){
-// 				if(n.matches(filter)){
-// 					r.push( n );
-// 				}
-// 			}else{
-// 				r.push( n );
-// 			}			
-// 	   }		  
-// 	}        
-//     return r;
-// }
-
 function getChildren(parentElement, filter){
 	let r = [];
 	n = parentElement.firstElementChild;
@@ -187,29 +176,6 @@ function getChildren(parentElement, filter){
 	}        
     return r;
 }
-
-
-// Get Siblings of an Element
-// Source: https://plainjs.com/javascript/traversing/get-siblings-of-an-element-40/
-// function getSiblings(el, filter) {
-// 	var siblings = [];
-// 	console.log(filter);
-//     el = el.parentNode.firstChild;
-//     do { if (!filter || filter(el)) siblings.push(el); } while (el = el.nextSibling);
-//     return siblings;
-// }
-
-// // example filter function
-// function exampleFilter(el) {
-//     return elem.nodeName.toLowerCase() == 'ul';
-// }
-
-// usage
-//el = document.querySelector('div');
-// get all siblings of el
-//var sibs = getSiblings(el);
-// get only anchor element siblings of el
-//var sibs_a = getSiblings(el, exampleFilter);
 
 })(document);
 
