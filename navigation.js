@@ -32,6 +32,14 @@ const srt = {
 	collapse: 'Collapse nav'
 }
 
+// Add the "js-on" class to the body.
+// This will trigger the subNav items
+// to hide. If JavaScript is disabled
+// then this script will not run and
+// the CSS will default to showing 
+// all the subNavs
+body.classList.add('js-on');
+
 // Hide open sub navs when body is clicked.
 // The click event handler function for  
 // the body is written further down and  

@@ -82,13 +82,17 @@ body {
 	}
 
 	.main-navigation ul ul {
-		display: none;
+		display: block;
 		margin-left: 0;
 		position: absolute;
 		top: 100%;
 		float: left;
 		z-index: 1;
 		background: white;
+	}
+
+	.js-on .main-navigation ul ul {
+		display: none;
 	}
 
 	.main-navigation ul li:hover > ul,
